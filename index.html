@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Hive Mind - Bee Data Visualization</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/hexagons.css">
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <!-- Libraries -->
+    <!-- Libraries -->
+<script src="https://d3js.org/d3.v7.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js" defer></script>
+<script src="https://unpkg.com/scrollama" defer></script>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="hexagon-loader"></div>
+        <p>Loading...</p>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-logo">
+            <div class="hexagon-logo">
+                <span class="hex-icon"></span>
+            </div>
+            <span class="logo-text">The Hive Mind</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#colonies">Colony Trends</a></li>
+            <li><a href="#production">Honey Production</a></li>
+            <li><a href="#global">Global Perspective</a></li>
+            <li><a href="#action" class="btn-action">Take Action</a></li>
+        </ul>
+        <button class="menu-toggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section id="hero" class="section hero-section">
+        <div class="hexagon-bg-pattern"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">THE HIVE MIND</h1>
+                <h2 class="hero-subtitle">VISUALIZING BEE DATA</h2>
+                <p class="hero-description">
+                    An in-depth exploration of bee populations, honey production, and the challenges 
+                    facing these essential pollinators. Scroll through interactive visualizations 
+                    that bring critical data to life and highlight why bees matter to our ecosystem.
+                </p>
+                <div class="scroll-indicator">
+                    <span>SCROLL TO EXPLORE</span>
+                    <div class="arrow-down"></div>
+                </div>
+            </div>
+            <div class="hero-bee-container" id="hero-bee-3d">
+                <!-- 3D bee model will be rendered here -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Overview Section -->
+    <section id="overview" class="section overview-section">
+        <div class="section-divider"></div>
+        <div class="container">
+            <header class="section-header">
+                <div class="section-hexagon"></div>
+                <h2 class="section-title">THE BIG PICTURE</h2>
+                <div class="section-underline"></div>
+            </header>
+            
+            <div class="stat-hexagons">
+                <div class="stat-hex">
+                    <div class="hex-wrapper">
+                        <div class="stat-value" data-value="48.2">0</div>
+                        <div class="stat-label">COLONY LOSS</div>
+                        <div class="stat-sublabel">2023 HIGH</div>
+                    </div>
+                </div>
+                <div class="stat-hex">
+                    <div class="hex-wrapper">
+                        <div class="stat-value" data-value="2.8">0</div>
+                        <div class="stat-label">U.S. COLONIES</div>
+                        <div class="stat-sublabel">MILLIONS</div>
+                    </div>
+                </div>
+                <div class="stat-hex">
+                    <div class="hex-wrapper">
+                        <div class="stat-value" data-value="95.2">0</div>
+                        <div class="stat-label">GLOBAL HIVES</div>
+                        <div class="stat-sublabel">MILLIONS</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="interactive-bee-container" id="interactive-bee">
+                <!-- Interactive rotating bee will be rendered here -->
+            </div>
+            
+            <div class="overview-content">
+                <p>
+                    Bees are responsible for pollinating approximately 75% of the fruits, nuts, and vegetables 
+                    grown in the United States. Yet since 2006, beekeepers have reported unprecedented losses 
+                    of 30-90 percent of their hives, with the phenomenon known as Colony Collapse Disorder (CCD) 
+                    posing a serious threat to agriculture and ecosystems worldwide.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Colony Losses Section -->
+    <section id="colonies" class="section colonies-section">
+        <div class="section-divider"></div>
+        <div class="container">
+            <header class="section-header">
+                <div class="section-hexagon"></div>
+                <h2 class="section-title">COLONY COLLAPSE</h2>
+                <div class="section-underline"></div>
+            </header>
+            
+            <p class="section-description">
+                Annual colony losses have reached alarming levels, with 2023 seeing the highest 
+                recorded loss of 48.2% since monitoring began.
+            </p>
+            
+            <div class="visualization-container">
+                <div id="colony-losses-chart" class="chart"></div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="legend-color critical"></span>
+                        <span class="legend-label">Critical Loss Threshold (30%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color average"></span>
+                        <span class="legend-label">Average Loss (41.5%)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="insights-container">
+                <div class="insight-hex">
+                    <div class="hex-wrapper">
+                        <h3>Key Factors</h3>
+                        <ul>
+                            <li>Pesticide exposure</li>
+                            <li>Parasites and pathogens</li>
+                            <li>Poor nutrition</li>
+                            <li>Climate change</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="insight-hex">
+                    <div class="hex-wrapper">
+                        <h3>Impact</h3>
+                        <p>Colony losses threaten food production globally, with economic impacts estimated at over $15 billion annually in the United States alone.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Honey Production Section -->
+    <section id="production" class="section production-section">
+        <div class="section-divider"></div>
+        <div class="container">
+            <header class="section-header">
+                <div class="section-hexagon"></div>
+                <h2 class="section-title">THE HONEY ECONOMY</h2>
+                <div class="section-underline"></div>
+            </header>
+            
+            <p class="section-description">
+                As colony numbers fluctuate, honey production and yield per colony show 
+                concerning trends that impact both the economy and ecosystem.
+            </p>
+            
+            <div class="visualization-container">
+                <div class="chart-controls">
+                    <button class="chart-btn active" data-chart="production">Production</button>
+                    <button class="chart-btn" data-chart="yield">Yield per Colony</button>
+                    <button class="chart-btn" data-chart="combined">Combined View</button>
+                </div>
+                <div id="honey-production-chart" class="chart"></div>
+            </div>
+            
+            <!-- Libraries <div class="hexagon-grid-container">
+              //  <h3 class="grid-title">Honey Production by State</h3>
+                <div id="hexagon-grid" class="hex-grid"></div>
+                <div class="grid-legend"></div>
+            </div>-->
+        </div>
+    </section>
+    
+    <!-- Global Perspective Section -->
+    <section id="global" class="section global-section">
+        <div class="section-divider"></div>
+        <div class="container">
+            <header class="section-header">
+                <div class="section-hexagon"></div>
+                <h2 class="section-title">GLOBAL PERSPECTIVE</h2>
+                <div class="section-underline"></div>
+            </header>
+            
+            <p class="section-description">
+                While some regions experience devastating losses, the global number of managed 
+                honeybee colonies has actually increased over the past decade.
+            </p>
+            
+            <div class="visualization-container">
+                <div id="global-data-chart" class="chart"></div>
+            </div>
+            
+            <div class="global-insights">
+                <div class="insight-column">
+                    <h3>Regional Variations</h3>
+                    <p>
+                        North America and Europe have seen consistent colony declines, 
+                        while Asia and Africa have experienced growth in managed hives.
+                    </p>
+                </div>
+                <div class="insight-column">
+                    <h3>Wild Pollinators</h3>
+                    <p>
+                        Wild bee populations, harder to track but equally vital to ecosystems, 
+                        are estimated to have declined by up to 30% in some regions.
+                    </p>
+                </div>
+                <div class="insight-column">
+                    <h3>Future Projections</h3>
+                    <p>
+                        If current trends continue, some regions may face pollinator shortages 
+                        that could significantly impact food production by 2050.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action Section -->
+    <section id="action" class="section action-section">
+        <div class="section-divider"></div>
+        <div class="container">
+            <header class="section-header">
+                <div class="section-hexagon"></div>
+                <h2 class="section-title">BEE THE SOLUTION</h2>
+                <div class="section-underline"></div>
+            </header>
+            
+            <div class="action-hexagons">
+                <div class="action-hex">
+                    <div class="hex-wrapper">
+                        <div class="hex-icon plant-icon"></div>
+                        <h3>Plant Bee-Friendly Gardens</h3>
+                        <p>Choose native flowering plants that provide nectar and pollen throughout the growing season.</p>
+                    </div>
+                </div>
+                <div class="action-hex">
+                    <div class="hex-wrapper">
+                        <div class="hex-icon pesticide-icon"></div>
+                        <h3>Avoid Pesticides</h3>
+                        <p>Use natural alternatives to chemicals that harm bees and other beneficial insects.</p>
+                    </div>
+                </div>
+                <div class="action-hex">
+                    <div class="hex-wrapper">
+                        <div class="hex-icon home-icon"></div>
+                        <h3>Create Bee Habitat</h3>
+                        <p>Provide nesting sites by leaving bare soil patches and hollow stems in your garden.</p>
+                    </div>
+                </div>
+                <div class="action-hex">
+                    <div class="hex-wrapper">
+                        <div class="hex-icon honey-icon"></div>
+                        <h3>Buy Local Honey</h3>
+                        <p>Support local beekeepers and sustainable beekeeping practices in your community.</p>
+                    </div>
+                </div>
+                <div class="action-hex">
+                    <div class="hex-wrapper">
+                        <div class="hex-icon advocate-icon"></div>
+                        <h3>Advocate for Bees</h3>
+                        <p>Support policies that protect pollinators and their habitats from harmful practices.</p>
+                    </div>
+                </div>
+            </div>
+            
+        <!-- <div class="resources-container">
+                <h3>Learn More</h3>
+                <div class="resources-grid">
+                    <a href="#" class="resource-item">Bee Conservation Alliance</a>
+                    <a href="#" class="resource-item">Pollinator Partnership</a>
+                    <a href="#" class="resource-item">Xerces Society</a>
+                    <a href="#" class="resource-item">Bee City USA</a>
+                </div>
+            </div>-->
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="hexagon-logo small">
+                        <span class="hex-icon small"></span>
+                    </div>
+                    <span class="logo-text">The Hive Mind</span>
+                </div>
+                <div class="footer-text">
+                    <p>Data sourced from USDA, FAO, and bee research organizations.</p>
+                    <p>Created with D3.js, Three.js, and a passion for bee conservation.</p>
+                </div>
+               <!--  <div class="footer-links">
+                    <a href="#">About</a>
+                    <a href="#">Data Sources</a>
+                    <a href="#">Methodology</a>
+                    <a href="#">Contact</a>
+                </div>-->
+            </div>
+            <div class="copyright">
+                <p>&copy; <span id="current-year">2023</span> The Hive Mind. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Flying Bee Animation (follows scroll) -->
+    <div id="flying-bee" class="flying-bee"></div>
+    
+    <!-- JavaScript -->
+    <script src="js/utils/data-loader.js"></script>
+    <script src="js/utils/hexagon-utils.js"></script>
+    <script src="js/bee-3d.js"></script>
+    <script src="js/flying-bee.js"></script>
+    <script src="js/visualizations/colony-losses.js"></script>
+    <script src="js/visualizations/honey-production.js"></script>
+    <script src="js/visualizations/hexagon-grid.js"></script>
+    <script src="js/visualizations/global-data.js"></script>
+    <script src="js/scrolling.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

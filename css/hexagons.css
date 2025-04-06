@@ -1,0 +1,456 @@
+/* ============================================
+   HEXAGONS CSS - THE HIVE MIND BEE VISUALIZATION
+   ============================================ */
+
+/* ---- HEXAGON BACKGROUNDS & PATTERNS ---- */
+
+/* Global honeycomb background pattern */
+.hexagon-bg-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffc107' fill-opacity='0.05'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    z-index: var(--z-negative);
+    pointer-events: none;
+  }
+  
+  /* Section hexagon decoration */
+  .section-hexagon {
+    position: absolute;
+    width: 80px;
+    height: 70px;
+    left: 50%;
+    top: -35px;
+    transform: translateX(-50%);
+    background-color: rgba(255, 193, 7, 0.05);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    z-index: 0;
+  }
+  
+  .section-hexagon::before {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 53px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: transparent;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+  }
+  
+  /* ---- HEXAGON GRID LAYOUTS ---- */
+  
+  /* Basic hexagon grid */
+  .hex-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-gap: 1rem;
+    padding: 1rem;
+  }
+  
+  /* Hexagon cell basic */
+  .hex-cell {
+    position: relative;
+    width: 100%;
+    padding-top: 115%; /* Maintain aspect ratio */
+    margin-bottom: 2rem;
+  }
+  
+  /* Offset every other row */
+  .hex-cell:nth-child(2n) {
+    margin-top: 2rem;
+  }
+  
+  /* Hexagon content wrapper */
+  .hex-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background-color: var(--color-dark-accent);
+    transition: transform var(--transition-normal);
+    cursor: pointer;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .hex-content:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Hexagon hover border effect */
+  .hex-content::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background-color: transparent;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    border: 2px solid var(--color-honey);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+  }
+  
+  .hex-content:hover::before {
+    opacity: 1;
+  }
+  
+  /* ---- HEXAGON INTERACTIVE ELEMENTS ---- */
+  
+  /* Hexagon button */
+  .hex-btn {
+    position: relative;
+    width: 70px;
+    height: 60px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.5rem;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background-color: var(--color-dark-accent);
+    color: var(--color-light);
+    border: 1px solid var(--color-honey);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+  }
+  
+  .hex-btn:hover, .hex-btn:focus {
+    background-color: var(--color-honey);
+    color: var(--color-dark);
+  }
+  
+  .hex-btn.active {
+    background-color: var(--color-honey);
+    color: var(--color-dark);
+    transform: scale(1.1);
+  }
+  
+  /* Hexagon progress ring */
+  .hex-progress {
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .hex-progress-path {
+    fill: none;
+    stroke: var(--color-honey);
+    stroke-width: 3;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset var(--transition-normal);
+  }
+  
+  .hex-progress-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 3;
+  }
+  
+  .hex-progress-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-honey);
+  }
+  
+  /* ---- HEXAGON DATA VISUALIZATIONS ---- */
+  
+  /* Hexagon data point */
+  .hex-data-point {
+    width: 14px;
+    height: 12px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background-color: var(--color-honey);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    transition: transform var(--transition-fast), 
+                background-color var(--transition-fast);
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+  .hex-data-point:hover {
+    transform: translate(-50%, -50%) scale(1.5);
+    background-color: var(--color-honey-light);
+    z-index: 3;
+  }
+  
+  /* Hexagon data point shadow */
+  .hex-data-point::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--color-honey);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+  
+  .hex-data-point:hover::after {
+    opacity: 0.7;
+  }
+  
+  /* Hexagon heat map cell */
+  .hex-heatmap-cell {
+    position: absolute;
+    width: 30px;
+    height: 26px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background-color: var(--color-honey);
+    opacity: 0.2;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+  }
+  
+  .hex-heatmap-cell:hover {
+    transform: scale(1.2);
+    z-index: 2;
+    opacity: 1;
+  }
+  
+  /* ---- ANIMATED HEXAGON ELEMENTS ---- */
+  
+  /* Honeycomb loading animation */
+  .hexagon-loader {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    perspective: 1000px;
+  }
+  
+  .hexagon-loader .hexagon {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background-color: var(--color-honey);
+    animation: hex-rotate 2s infinite;
+    backface-visibility: hidden;
+  }
+  
+  .hexagon-loader .hexagon:nth-child(1) {
+    animation-delay: -0.5s;
+    opacity: 0.8;
+  }
+  
+  .hexagon-loader .hexagon:nth-child(2) {
+    animation-delay: -1s;
+    opacity: 0.6;
+  }
+  
+  .hexagon-loader .hexagon:nth-child(3) {
+    animation-delay: -1.5s;
+    opacity: 0.4;
+  }
+  
+  @keyframes hex-rotate {
+    0% {
+      transform: rotateY(0deg) scale(0.8);
+    }
+    50% {
+      transform: rotateY(180deg) scale(1.2);
+    }
+    100% {
+      transform: rotateY(360deg) scale(0.8);
+    }
+  }
+  
+  /* Pulsing hexagon */
+  .hex-pulse {
+    width: 20px;
+    height: 18px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background-color: var(--color-honey);
+    animation: pulse 2s infinite;
+  }
+  
+  /* Floating hexagons background decoration */
+  .floating-hexagons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: var(--z-negative);
+    pointer-events: none;
+  }
+  
+  .floating-hex {
+    position: absolute;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background-color: var(--color-honey);
+    opacity: 0.05;
+    animation: float 15s infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(10deg);
+    }
+  }
+  
+  /* ---- HEXAGON DECORATIVE ELEMENTS ---- */
+  
+  /* Honeycomb divider */
+  .honeycomb-divider {
+    width: 100%;
+    height: 30px;
+    margin: 2rem 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .honeycomb-divider::before {
+    content: '';
+    position: absolute;
+    width: 80%;
+    height: 1px;
+    background-color: rgba(255, 193, 7, 0.3);
+    top: 50%;
+    left: 10%;
+  }
+  
+  .honeycomb-divider .hex {
+    width: 20px;
+    height: 18px;
+    background-color: var(--color-honey);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    position: relative;
+    z-index: 1;
+    margin: 0 5px;
+  }
+  
+  /* Hexagon image frame */
+  .hex-image-frame {
+    position: relative;
+    width: 200px;
+    height: 230px;
+    margin: 2rem auto;
+  }
+  
+  .hex-image-wrap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+  
+  .hex-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+  }
+  
+  .hex-image-frame:hover img {
+    transform: scale(1.1);
+  }
+  
+  .hex-image-frame::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background-color: transparent;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    border: 2px solid var(--color-honey);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+  }
+  
+  .hex-image-frame:hover::before {
+    opacity: 1;
+  }
+  
+  /* ---- MEDIA QUERIES FOR HEXAGONS ---- */
+  
+  @media (max-width: 992px) {
+    .hex-grid {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+    
+    .hex-btn {
+      width: 60px;
+      height: 52px;
+      font-size: var(--font-size-xs);
+    }
+    
+    .hex-image-frame {
+      width: 160px;
+      height: 185px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .hex-grid {
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+    
+    .floating-hexagons {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .hex-progress {
+      width: 80px;
+      height: 80px;
+    }
+    
+    .hex-progress-value {
+      font-size: var(--font-size-md);
+    }
+    
+    .hex-btn {
+      width: 50px;
+      height: 44px;
+      font-size: var(--font-size-xs);
+    }
+    
+    .hex-data-point {
+      width: 12px;
+      height: 10px;
+    }
+    
+    .hex-image-frame {
+      width: 120px;
+      height: 140px;
+    }
+  }
+  
